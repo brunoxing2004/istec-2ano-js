@@ -6,5 +6,4 @@ function changeAllArticleColors() {
     }
   }
   
-  changeAllArticleColors();
-  
+  changeAllArticleColors();  
