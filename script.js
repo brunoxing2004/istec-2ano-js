@@ -7,54 +7,63 @@ function attachBuyEvents() {
       parentArticle.classList.toggle('sale');
 
       const productId = parentArticle.getAttribute('data-id');
-      const productName = parentArticle.querySelector('.product-name').textContent;
-      const productPrice = parseFloat(parentArticle.querySelector('.product-price').textContent.replace('€', ''));
-      const quantity = parseInt(parentArticle.querySelector('.quantity').value);
+      const productNameElement = parentArticle.querySelector('h2');
+      const productPriceElement = parentArticle.querySelector('.price');
+      const quantityElement = parentArticle.querySelector('.quantity');
 
-      const cartTable = document.getElementById('cart-table');
-      let existingRow = cartTable.querySelector(`tr[data-id="${productId}"]`);
+      // Verificar se os elementos necessários existem
+      if (productId && productNameElement && productPriceElement && quantityElement) {
+        const productName = productNameElement.textContent;
+        const productPrice = parseFloat(productPriceElement.textContent);
+        const quantity = parseInt(quantityElement.value);
 
-      if (!existingRow) {
-        const newRow = cartTable.insertRow();
-        newRow.setAttribute('data-id', productId);
+        const cartTable = document.querySelector('#cart table');
+        const cartTotalCell = document.querySelector('#cart table tfoot th:last-child');
 
-        const cells = ['id', 'name', 'quantity', 'price', 'total'].map((className, index) => {
-          const cell = newRow.insertCell(index);
-          cell.textContent = (className === 'name') ? productName : parentArticle.querySelector(`.${className}`).textContent;
-          return cell;
-        });
+        let existingRow = cartTable.querySelector(`tr[data-id="${productId}"]`);
 
-        const deleteCell = newRow.insertCell(cells.length);
-        const deleteLink = document.createElement('a');
-        deleteLink.href = '#';
-        deleteLink.textContent = 'Delete';
-        deleteLink.addEventListener('click', function (event) {
-          event.preventDefault();
-          newRow.remove();
-          updateCartTotal();
-        });
+        if (!existingRow) {
+          const newRow = cartTable.insertRow(-1); // -1 para adicionar no final
+          newRow.setAttribute('data-id', productId);
 
-        deleteCell.appendChild(deleteLink);
-      } else {
-        existingRow.cells[2].textContent = quantity;
-        existingRow.cells[4].textContent = (productPrice * quantity).toFixed(2) + '€';
+          const cells = ['id', 'name', 'quantity', 'price', 'total'].map((className, index) => {
+            const cell = newRow.insertCell(index);
+            cell.textContent = (className === 'name') ? productName : parentArticle.querySelector(`.${className}`).textContent;
+            return cell;
+          });
+
+          const deleteCell = newRow.insertCell(cells.length);
+          const deleteLink = document.createElement('a');
+          deleteLink.href = '#';
+          deleteLink.textContent = 'Delete';
+          deleteLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            newRow.remove();
+            updateCartTotal();
+          });
+
+          deleteCell.appendChild(deleteLink);
+        } else {
+          existingRow.cells[2].textContent = quantity;
+          existingRow.cells[4].textContent = (productPrice * quantity).toFixed(2);
+        }
+
+        updateCartTotal();
       }
-
-      updateCartTotal();
     });
   }
 }
 
 function updateCartTotal() {
-  const cartTable = document.getElementById('cart-table');
+  const cartTable = document.querySelector('#cart table');
   const totalCells = cartTable.querySelectorAll('.total');
   let cartTotal = 0;
 
   totalCells.forEach(cell => {
-    cartTotal += parseFloat(cell.textContent.replace('€', ''));
+    cartTotal += parseFloat(cell.textContent);
   });
 
-  document.getElementById('cart-total').textContent = 'Total: ' + cartTotal.toFixed(2) + '€';
+  document.querySelector('#cart table tfoot th:last-child').textContent = cartTotal.toFixed(2);
 }
 
 attachBuyEvents();
