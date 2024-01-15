@@ -1,9 +1,12 @@
-function changeAllArticleColors() {
-    const articles = document.querySelectorAll('#products article');
-    
-    for (const article of articles) {
-      article.classList.add('sale');
-    }
-  }
+function attachBuyEvents() {
+    const buttons = document.querySelectorAll('#products button');
   
-  changeAllArticleColors();  
+    for (const button of buttons) {
+      button.addEventListener('click', function (e) {
+        console.log('BUY!');
+        console.log(e.currentTarget);
+      });
+    }
+    }
+  
+attachBuyEvents();  
