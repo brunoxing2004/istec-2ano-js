@@ -11,7 +11,6 @@ function attachBuyEvents() {
       const productPriceElement = parentArticle.querySelector('.price');
       const quantityElement = parentArticle.querySelector('.quantity');
 
-      // Verificar se os elementos necessários existem
       if (productId && productNameElement && productPriceElement && quantityElement) {
         const productName = productNameElement.textContent;
         const productPrice = parseFloat(productPriceElement.textContent);
@@ -23,7 +22,7 @@ function attachBuyEvents() {
         let existingRow = cartTable.querySelector(`tr[data-id="${productId}"]`);
 
         if (!existingRow) {
-          const newRow = cartTable.insertRow(-1); // -1 para adicionar no final
+          const newRow = cartTable.insertRow(-1);
           newRow.setAttribute('data-id', productId);
 
           const cells = ['id', 'name', 'quantity', 'price', 'total'].map((className, index) => {
@@ -53,6 +52,7 @@ function attachBuyEvents() {
     });
   }
 }
+
 
 function updateCartTotal() {
   const cartTable = document.querySelector('#cart table');
