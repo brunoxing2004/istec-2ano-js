@@ -31,6 +31,10 @@ body {
   width: 3em;
 }
 
+#products article.sale {
+  background-color: #ffddd2;
+}
+
 #cart table {
   border-collapse: collapse;
   margin: 1em 0;
